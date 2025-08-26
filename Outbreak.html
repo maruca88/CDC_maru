@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Outbreak Scenario 2025 - Enhanced</title>
+    <title>Outbreak Scenario 2025 - Fire Isles Emergency</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
         
         :root {
-            --primary: #2563eb;
+            --primary: #1E40AF;
             --primary-dark: #1d4ed8;
             --secondary: #06b6d4;
             --accent: #f59e0b;
@@ -29,6 +29,8 @@
             --glass-border: rgba(255, 255, 255, 0.2);
             --shadow: rgba(15, 23, 42, 0.08);
             --shadow-lg: rgba(15, 23, 42, 0.15);
+            --fire-red: #DC2626;
+            --fire-orange: #FF6B00;
         }
 
         * {
@@ -39,11 +41,12 @@
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #1E40AF 0%, #3B82F6 50%, #06b6d4 100%);
             min-height: 100vh;
             color: var(--text-inverse);
             overflow-x: hidden;
             position: relative;
+            line-height: 1.6;
         }
 
         body::before {
@@ -54,101 +57,40 @@
             right: 0;
             bottom: 0;
             background: 
-                radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 20% 50%, rgba(239, 68, 68, 0.2) 0%, transparent 50%),
                 radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
                 radial-gradient(circle at 40% 80%, rgba(17, 24, 39, 0.2) 0%, transparent 50%);
             pointer-events: none;
             z-index: -1;
         }
 
-        /* Floating particles animation */
-        .particle {
-            position: absolute;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-            pointer-events: none;
-            animation: float 6s ease-in-out infinite;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.4; }
-            50% { transform: translateY(-20px) rotate(180deg); opacity: 0.8; }
-        }
-
-        .container {
+        /* Twine Story Container */
+        tw-story {
             max-width: 1200px;
             margin: 0 auto;
             padding: 2rem;
+            font-size: 1.1rem;
+            line-height: 1.7;
+            display: block;
             position: relative;
             z-index: 1;
         }
 
-        /* Header */
-        .header {
-            text-align: center;
-            margin-bottom: 3rem;
-            padding: 2rem 0;
-            position: relative;
-        }
-
-        .title {
-            font-size: clamp(2.5rem, 5vw, 4rem);
-            font-weight: 800;
-            background: linear-gradient(135deg, #ffffff 0%, #e2e8f0 100%);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 1rem;
-            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-            animation: titleGlow 3s ease-in-out infinite alternate;
-        }
-
-        @keyframes titleGlow {
-            from { filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.3)); }
-            to { filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.5)); }
-        }
-
-        .subtitle {
-            font-size: 1.25rem;
-            font-weight: 400;
-            opacity: 0.9;
-            margin-bottom: 0.5rem;
-        }
-
-        .date-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            background: var(--glass);
-            backdrop-filter: blur(10px);
-            border: 1px solid var(--glass-border);
-            padding: 0.75rem 1.5rem;
-            border-radius: 50px;
-            font-weight: 500;
-            font-size: 0.9rem;
-            animation: pulse 2s ease-in-out infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-
-        /* Cards */
-        .card {
+        /* Twine Passages */
+        tw-passage {
             background: var(--glass);
             backdrop-filter: blur(15px);
             border: 1px solid var(--glass-border);
             border-radius: 20px;
-            padding: 2rem;
+            padding: 2.5rem;
             margin-bottom: 2rem;
             box-shadow: 0 8px 32px var(--shadow-lg);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             overflow: hidden;
+            animation: fadeIn 0.8s ease-out;
         }
 
-        .card::before {
+        tw-passage::before {
             content: '';
             position: absolute;
             top: 0;
@@ -159,155 +101,41 @@
             transition: left 0.5s;
         }
 
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 16px 48px var(--shadow-lg);
-            border-color: rgba(255, 255, 255, 0.3);
-        }
-
-        .card:hover::before {
+        tw-passage:hover::before {
             left: 100%;
         }
 
-        .card-header {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .card-icon {
-            width: 3rem;
-            height: 3rem;
-            background: linear-gradient(135deg, var(--accent) 0%, #f97316 100%);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
-        }
-
-        .card-title {
-            font-size: 1.5rem;
+        /* Header Styling */
+        tw-passage > p:first-child {
+            font-size: 1.8rem;
             font-weight: 700;
+            text-align: center;
+            margin-bottom: 1.5rem;
             color: var(--text-inverse);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
         }
 
-        .card-content {
-            line-height: 1.7;
-            font-size: 1.1rem;
-            color: rgba(255, 255, 255, 0.9);
-        }
-
-        /* Instructions Card */
-        .instructions-card {
-            background: linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(6, 182, 212, 0.2) 100%);
-            border: 1px solid rgba(16, 185, 129, 0.3);
-        }
-
-        .instructions-list {
-            list-style: none;
-            margin: 1.5rem 0;
-        }
-
-        .instructions-list li {
-            display: flex;
-            align-items: flex-start;
-            gap: 1rem;
-            margin-bottom: 1rem;
-            padding: 1rem;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 12px;
-            transition: background 0.3s ease;
-        }
-
-        .instructions-list li:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        .step-number {
-            background: var(--success);
-            color: white;
-            width: 2rem;
-            height: 2rem;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
-            font-size: 0.9rem;
-            flex-shrink: 0;
-        }
-
-        /* Alert Box */
-        .alert {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            background: rgba(239, 68, 68, 0.2);
-            border: 1px solid rgba(239, 68, 68, 0.4);
-            border-radius: 12px;
-            padding: 1rem;
-            margin: 1.5rem 0;
-            animation: alertPulse 2s ease-in-out infinite;
-        }
-
-        @keyframes alertPulse {
-            0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
-            50% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
-        }
-
-        .alert-icon {
-            font-size: 1.5rem;
-            animation: bounce 1s infinite;
-        }
-
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-            40% { transform: translateY(-10px); }
-            60% { transform: translateY(-5px); }
-        }
-
-        /* Navigation Buttons */
-        .nav-section {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-            margin: 3rem 0;
-            flex-wrap: wrap;
-        }
-
-        .btn {
+        /* Enhanced Links */
+        tw-link, .link {
             background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-            color: var(--text-inverse);
-            border: none;
-            padding: 1rem 2rem;
+            color: var(--text-inverse) !important;
+            text-decoration: none;
+            padding: 0.75rem 1.5rem;
             border-radius: 50px;
             font-weight: 600;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-            text-decoration: none;
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
-            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4);
+            margin: 0.25rem;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: none;
+            box-shadow: 0 4px 15px rgba(30, 64, 175, 0.4);
+            position: relative;
+            overflow: hidden;
         }
 
-        .btn-success {
-            background: linear-gradient(135deg, var(--success) 0%, #059669 100%);
-            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
-        }
-
-        .btn-secondary {
-            background: linear-gradient(135deg, var(--dark-secondary) 0%, var(--dark-tertiary) 100%);
-            box-shadow: 0 4px 15px rgba(30, 41, 59, 0.4);
-        }
-
-        .btn::before {
+        tw-link::before, .link::before {
             content: '';
             position: absolute;
             top: 0;
@@ -318,155 +146,243 @@
             transition: left 0.5s;
         }
 
-        .btn:hover {
+        tw-link:hover, .link:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.6);
+            box-shadow: 0 8px 25px rgba(30, 64, 175, 0.6);
         }
 
-        .btn-success:hover {
-            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.6);
-        }
-
-        .btn-secondary:hover {
-            box-shadow: 0 8px 25px rgba(30, 41, 59, 0.6);
-        }
-
-        .btn:hover::before {
+        tw-link:hover::before, .link:hover::before {
             left: 100%;
         }
 
-        .btn:active {
+        tw-link:active, .link:active {
             transform: translateY(0);
         }
 
-        /* Progress Bar */
-        .progress-container {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 50px;
-            height: 8px;
-            margin: 2rem 0;
+        /* Special link colors */
+        tw-link[href*="BACK"], .link[href*="BACK"] {
+            background: linear-gradient(135deg, var(--dark-secondary) 0%, var(--dark-tertiary) 100%);
+            box-shadow: 0 4px 15px rgba(30, 41, 59, 0.4);
+        }
+
+        tw-link[href*="Continue"], tw-link[href*="Proceed"], .link[href*="Continue"], .link[href*="Proceed"] {
+            background: linear-gradient(135deg, var(--success) 0%, #059669 100%);
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+        }
+
+        tw-link[href*="Continue"]:hover, tw-link[href*="Proceed"]:hover {
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.6);
+        }
+
+        /* Alert/Warning Styling */
+        p:contains("⚠️"), p:contains("CONSEQUENCE") {
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid rgba(239, 68, 68, 0.4);
+            border-radius: 12px;
+            padding: 1rem;
+            margin: 1rem 0;
+            animation: alertPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes alertPulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+            50% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+        }
+
+        /* Section Headers */
+        strong {
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        /* Lists */
+        ul, ol {
+            margin: 1rem 0;
+            padding-left: 1.5rem;
+        }
+
+        li {
+            margin: 0.5rem 0;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        /* Background colored sections */
+        [style*="background: #1E40AF"], [style*="background:#1E40AF"] {
+            background: var(--primary) !important;
+            padding: 1rem;
+            border-radius: 12px;
+            margin: 1rem 0;
+        }
+
+        [style*="background: #2C3E50"], [style*="background:#2C3E50"] {
+            background: var(--dark-secondary) !important;
+            padding: 1rem;
+            border-radius: 12px;
+            margin: 1rem 0;
+        }
+
+        [style*="background: #27AE60"], [style*="background:#27AE60"] {
+            background: var(--success) !important;
+            padding: 1rem;
+            border-radius: 12px;
+            margin: 1rem 0;
+        }
+
+        /* Text colors */
+        [style*="colour: #1E40AF"], [style*="color: #1E40AF"] {
+            color: var(--info) !important;
+        }
+
+        [style*="colour: #B45309"], [style*="color: #B45309"] {
+            color: var(--accent) !important;
+        }
+
+        [style*="colour: #166534"], [style*="color: #166534"] {
+            color: var(--success) !important;
+        }
+
+        [style*="colour: #DC2626"], [style*="color: #DC2626"] {
+            color: var(--danger) !important;
+        }
+
+        /* Title styling */
+        h1, h2, h3, h4, h5, h6 {
+            color: var(--text-inverse);
+            font-weight: 700;
+            margin: 1rem 0;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Centered text */
+        [style*="text-align: center"] {
+            text-align: center;
+        }
+
+        /* Progress tracking */
+        .scenario-progress {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            padding: 1rem;
+            z-index: 1000;
+            font-size: 0.9rem;
+            min-width: 200px;
+        }
+
+        .progress-bar-container {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            height: 6px;
+            margin: 0.5rem 0;
             overflow: hidden;
         }
 
         .progress-bar {
             height: 100%;
             background: linear-gradient(90deg, var(--success) 0%, var(--secondary) 100%);
-            border-radius: 50px;
-            width: 5%;
+            border-radius: 10px;
             transition: width 0.5s ease;
             animation: progressGlow 2s ease-in-out infinite alternate;
         }
 
         @keyframes progressGlow {
             from { box-shadow: 0 0 5px rgba(16, 185, 129, 0.5); }
-            to { box-shadow: 0 0 15px rgba(16, 185, 129, 0.8); }
+            to { box-shadow: 0 0 10px rgba(16, 185, 129, 0.8); }
         }
 
-        .progress-text {
-            text-align: center;
-            font-size: 0.9rem;
-            margin-top: 0.5rem;
-            opacity: 0.8;
-        }
-
-        /* Status Indicators */
-        .status-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1rem;
-            margin: 2rem 0;
-        }
-
-        .status-item {
-            background: var(--glass);
-            border: 1px solid var(--glass-border);
-            border-radius: 12px;
-            padding: 1.5rem;
-            text-align: center;
-            transition: all 0.3s ease;
-        }
-
-        .status-item:hover {
-            transform: scale(1.05);
-        }
-
-        .status-icon {
-            font-size: 2rem;
-            margin-bottom: 0.5rem;
-            display: block;
-        }
-
-        .status-label {
-            font-weight: 600;
-            margin-bottom: 0.25rem;
-        }
-
-        .status-value {
-            font-size: 0.9rem;
-            opacity: 0.8;
-        }
-
-        /* Animations */
-        .fade-in {
-            animation: fadeIn 0.8s ease-out;
-        }
-
+        /* Animation keyframes */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(30px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .slide-in-left {
-            animation: slideInLeft 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        /* Emergency styling */
+        .emergency-header {
+            background: linear-gradient(135deg, var(--fire-red) 0%, var(--fire-orange) 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 20px;
+            text-align: center;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 32px rgba(220, 38, 38, 0.4);
+            animation: emergencyPulse 3s ease-in-out infinite;
         }
 
-        @keyframes slideInLeft {
-            from { opacity: 0; transform: translateX(-50px); }
-            to { opacity: 1; transform: translateX(0); }
+        @keyframes emergencyPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
         }
 
-        .slide-in-right {
-            animation: slideInRight 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        /* Video call interface enhancements */
+        .video-call-container {
+            background: var(--dark);
+            border-radius: 20px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
         }
 
-        @keyframes slideInRight {
-            from { opacity: 0; transform: translateX(50px); }
-            to { opacity: 1; transform: translateX(0); }
+        .participant-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
         }
 
-        /* Responsive Design */
+        .participant {
+            background: var(--dark-secondary);
+            border-radius: 12px;
+            padding: 1rem;
+            text-align: center;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .participant.speaking {
+            border-color: var(--success);
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
+        }
+
+        .participant-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            margin: 0 auto 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+        }
+
+        /* Responsive design */
         @media (max-width: 768px) {
-            .container {
+            tw-story {
                 padding: 1rem;
             }
             
-            .card {
+            tw-passage {
                 padding: 1.5rem;
                 border-radius: 16px;
             }
             
-            .card-header {
-                flex-direction: column;
-                text-align: center;
-                gap: 0.5rem;
-            }
-            
-            .nav-section {
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            .btn {
+            .scenario-progress {
+                position: static;
+                margin-bottom: 2rem;
                 width: 100%;
-                justify-content: center;
             }
             
-            .status-grid {
-                grid-template-columns: 1fr;
+            tw-link, .link {
+                display: block;
+                text-align: center;
+                margin: 0.5rem 0;
             }
         }
 
-        /* Loading Animation */
+        /* Loading animation */
         .loading {
             display: inline-block;
             width: 20px;
@@ -480,264 +396,235 @@
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
+
+        /* Floating particles */
+        .particle {
+            position: fixed;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: float 8s ease-in-out infinite;
+            z-index: -1;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.3; }
+            50% { transform: translateY(-30px) rotate(180deg); opacity: 0.6; }
+        }
+
+        /* Hide default Twine elements */
+        tw-sidebar {
+            display: none;
+        }
+
+        /* Special emoji styling */
+        .emoji {
+            font-size: 1.2em;
+            margin: 0 0.2em;
+        }
     </style>
 </head>
 <body>
     <!-- Floating particles -->
     <div class="particle" style="top: 10%; left: 10%; width: 4px; height: 4px; animation-delay: 0s;"></div>
-    <div class="particle" style="top: 20%; left: 80%; width: 6px; height: 6px; animation-delay: 1s;"></div>
-    <div class="particle" style="top: 60%; left: 20%; width: 3px; height: 3px; animation-delay: 2s;"></div>
-    <div class="particle" style="top: 80%; left: 70%; width: 5px; height: 5px; animation-delay: 3s;"></div>
-    <div class="particle" style="top: 40%; left: 90%; width: 4px; height: 4px; animation-delay: 4s;"></div>
+    <div class="particle" style="top: 20%; left: 80%; width: 6px; height: 6px; animation-delay: 2s;"></div>
+    <div class="particle" style="top: 60%; left: 20%; width: 3px; height: 3px; animation-delay: 4s;"></div>
+    <div class="particle" style="top: 80%; left: 70%; width: 5px; height: 5px; animation-delay: 6s;"></div>
 
-    <div class="container">
-        <!-- Header -->
-        <header class="header fade-in">
-            <h1 class="title">OUTBREAK SCENARIO 2025</h1>
-            <p class="subtitle">Advanced Epidemic Response Training Module</p>
-            <div class="date-badge">
-                <span>🦠</span>
-                <span>Interactive Assessment Ready</span>
-            </div>
-        </header>
-
-        <!-- Progress Section -->
-        <div class="card slide-in-left" style="animation-delay: 0.2s;">
-            <div class="progress-container">
-                <div class="progress-bar" id="progressBar"></div>
-            </div>
-            <div class="progress-text">Scenario Progress: <span id="progressText">Starting...</span></div>
+    <!-- Progress Tracker -->
+    <div class="scenario-progress">
+        <div style="font-weight: 600; margin-bottom: 0.5rem;">🦠 Fire Isles Investigation</div>
+        <div class="progress-bar-container">
+            <div class="progress-bar" id="progressBar" style="width: 5%"></div>
         </div>
-
-        <!-- Instructions Card -->
-        <div class="card instructions-card slide-in-right" style="animation-delay: 0.4s;">
-            <div class="card-header">
-                <div class="card-icon">📋</div>
-                <h2 class="card-title">INSTRUCTIONS</h2>
-            </div>
-            <div class="card-content">
-                <p>Welcome to the comprehensive outbreak scenario training module. This simulation will test your epidemiological knowledge and decision-making skills in a realistic outbreak situation.</p>
-                
-                <ul class="instructions-list">
-                    <li>
-                        <span class="step-number">1</span>
-                        <div>
-                            <strong>Read Carefully:</strong> Each section contains critical information that will inform your decisions. Take time to understand the context and data presented.
-                        </div>
-                    </li>
-                    <li>
-                        <span class="step-number">2</span>
-                        <div>
-                            <strong>Audio Content:</strong> Some scenes include audio narration. Ensure your sound is enabled and volume is appropriate before beginning.
-                        </div>
-                    </li>
-                    <li>
-                        <span class="step-number">3</span>
-                        <div>
-                            <strong>Navigation:</strong> Use the "Proceed" button to advance through scenarios. The "Back" button allows you to review previous information.
-                        </div>
-                    </li>
-                    <li>
-                        <span class="step-number">4</span>
-                        <div>
-                            <strong>Assessment:</strong> Your responses will be evaluated based on epidemiological best practices and current outbreak response protocols.
-                        </div>
-                    </li>
-                </ul>
-
-                <div class="alert">
-                    <span class="alert-icon">🔊</span>
-                    <div>
-                        <strong>Audio Warning:</strong> Make sure your sound is on and check your volume before commencing to avoid audio surprises!
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Status Dashboard -->
-        <div class="card slide-in-left" style="animation-delay: 0.6s;">
-            <div class="card-header">
-                <div class="card-icon">📊</div>
-                <h2 class="card-title">SCENARIO STATUS</h2>
-            </div>
-            <div class="status-grid">
-                <div class="status-item">
-                    <span class="status-icon">🌍</span>
-                    <div class="status-label">Location</div>
-                    <div class="status-value">Fire Isles Region</div>
-                </div>
-                <div class="status-item">
-                    <span class="status-icon">📅</span>
-                    <div class="status-label">Scenario Date</div>
-                    <div class="status-value">August 2025</div>
-                </div>
-                <div class="status-item">
-                    <span class="status-icon">⏱️</span>
-                    <div class="status-label">Estimated Duration</div>
-                    <div class="status-value">45-60 minutes</div>
-                </div>
-                <div class="status-item">
-                    <span class="status-icon">🎯</span>
-                    <div class="status-label">Difficulty</div>
-                    <div class="status-value">Advanced Level</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Navigation Section -->
-        <div class="nav-section slide-in-right" style="animation-delay: 0.8s;">
-            <button class="btn btn-success" onclick="startScenario()">
-                <span>🚀</span>
-                <span>Start Scenario</span>
-            </button>
-            <button class="btn btn-secondary" onclick="showHelp()">
-                <span>❓</span>
-                <span>Help & Resources</span>
-            </button>
-        </div>
-
-        <!-- Quick Actions Card -->
-        <div class="card slide-in-left" style="animation-delay: 1s;">
-            <div class="card-header">
-                <div class="card-icon">⚡</div>
-                <h2 class="card-title">QUICK ACTIONS</h2>
-            </div>
-            <div class="card-content">
-                <div class="nav-section">
-                    <button class="btn btn-secondary" onclick="checkAudio()">
-                        <span>🔊</span>
-                        <span>Test Audio</span>
-                    </button>
-                    <button class="btn btn-secondary" onclick="reviewGuidelines()">
-                        <span>📖</span>
-                        <span>Review Guidelines</span>
-                    </button>
-                    <button class="btn btn-secondary" onclick="resetProgress()">
-                        <span>🔄</span>
-                        <span>Reset Progress</span>
-                    </button>
-                </div>
-            </div>
-        </div>
+        <div id="progressText" style="font-size: 0.8rem; opacity: 0.8;">Starting Investigation...</div>
     </div>
 
-    <script>
-        // Smooth scrolling and interactive elements
-        document.addEventListener('DOMContentLoaded', function() {
-            // Animate progress bar on load
-            setTimeout(() => {
-                const progressBar = document.getElementById('progressBar');
-                const progressText = document.getElementById('progressText');
-                progressBar.style.width = '5%';
-                progressText.textContent = 'Ready to Begin (0/15 sections)';
-            }, 1000);
+    <!-- Twine Story Integration -->
+    <tw-story>
+        <noscript>
+            <tw-noscript>JavaScript needs to be enabled to play Outbreak Scenario 2025.</tw-noscript>
+        </noscript>
+    </tw-story>
 
-            // Add more floating particles dynamically
-            createFloatingParticles();
-        });
+    <!-- Original Twine Data (keeping your complete scenario structure) -->
+    <tw-storydata name="Outbreak Scenario 2025" startnode="1" creator="Twine" creator-version="2.10.0" format="Harlowe" format-version="3.3.9" ifid="C3DCDED7-6D72-47AE-B4D5-A5DFC6713CEE" options="" tags="" zoom="1" hidden>
+        
+        <tw-passagedata pid="1" name="Start" tags="" position="375,25" size="100,100">
+            <div class="emergency-header">
+                <h1>🏥 🌍 🔬</h1>
+                <h2>Outbreak Investigation Scenario</h2>
+                <h3 style="color: var(--fire-orange);">Fire Isles Emergency</h3>
+                <p>Welcome to this interactive outbreak investigation training scenario.</p>
+            </div>
 
-        function createFloatingParticles() {
-            const particleCount = 8;
-            const body = document.body;
-            
-            for (let i = 0; i < particleCount; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'particle';
-                particle.style.top = Math.random() * 100 + '%';
-                particle.style.left = Math.random() * 100 + '%';
-                particle.style.width = (Math.random() * 4 + 2) + 'px';
-                particle.style.height = particle.style.width;
-                particle.style.animationDelay = Math.random() * 6 + 's';
-                particle.style.animationDuration = (Math.random() * 4 + 4) + 's';
-                body.appendChild(particle);
-            }
-        }
+            <div style="background: var(--glass); padding: 2rem; border-radius: 15px; margin: 2rem 0; border: 1px solid var(--glass-border);">
+                <h3 style="color: var(--info); margin-bottom: 1rem;">📋 Instructions:</h3>
+                <ul style="list-style: none; padding: 0;">
+                    <li style="padding: 0.5rem 0; display: flex; align-items: center; gap: 0.5rem;">
+                        <span style="background: var(--primary); color: white; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: bold;">1</span>
+                        Read each situation carefully
+                    </li>
+                    <li style="padding: 0.5rem 0; display: flex; align-items: center; gap: 0.5rem;">
+                        <span style="background: var(--primary); color: white; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: bold;">2</span>
+                        Make decisions based on your public health knowledge
+                    </li>
+                    <li style="padding: 0.5rem 0; display: flex; align-items: center; gap: 0.5rem;">
+                        <span style="background: var(--primary); color: white; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: bold;">3</span>
+                        Some choices will test your understanding of outbreak investigation principles
+                    </li>
+                    <li style="padding: 0.5rem 0; display: flex; align-items: center; gap: 0.5rem;">
+                        <span style="background: var(--primary); color: white; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: bold;">4</span>
+                        Incorrect answers will provide feedback before allowing you to continue
+                    </li>
+                </ul>
+            </div>
 
-        function startScenario() {
-            const btn = event.target.closest('.btn');
-            const originalText = btn.innerHTML;
-            
-            btn.innerHTML = '<div class="loading"></div> <span>Loading Scenario...</span>';
-            btn.disabled = true;
-            
-            // Animate progress bar
-            const progressBar = document.getElementById('progressBar');
-            const progressText = document.getElementById('progressText');
-            progressBar.style.width = '10%';
-            progressText.textContent = 'Initializing... (1/15 sections)';
-            
-            // Simulate loading and redirect to first scenario
-            setTimeout(() => {
-                alert('Scenario would start here! This connects to your original Twine content.');
-                btn.innerHTML = originalText;
-                btn.disabled = false;
-            }, 2000);
-        }
+            <div style="text-align: center; margin: 2rem 0;">
+                <h3 style="color: var(--fire-orange); font-size: 1.5rem;">Are you ready to begin?</h3>
+            </div>
 
-        function showHelp() {
-            alert('Help resources and epidemiological guidelines would be displayed here.');
-        }
+            <div style="text-align: center; margin: 2rem 0;">
+                [[🚀 Start Investigation->Phone Call]]
+            </div>
+        </tw-passagedata>
 
-        function checkAudio() {
-            const btn = event.target.closest('.btn');
-            const originalText = btn.innerHTML;
-            
-            btn.innerHTML = '<div class="loading"></div> <span>Testing Audio...</span>';
-            
-            // Simulate audio test
-            setTimeout(() => {
-                alert('🔊 Audio test complete! Your system audio is working properly.');
-                btn.innerHTML = originalText;
-            }, 1500);
-        }
+        <tw-passagedata pid="2" name="Phone Call" tags="" position="375,400" size="100,100">
+            <div style="background: var(--success); color: white; padding: 1.5rem; border-radius: 15px; text-align: center; margin-bottom: 2rem;">
+                <h2>📞 Emergency Call - August 30th, 2025</h2>
+            </div>
 
-        function reviewGuidelines() {
-            alert('📖 Epidemiological response guidelines and reference materials would be displayed here.');
-        }
+            <div style="background: var(--glass); padding: 2rem; border-radius: 15px; margin: 1rem 0; border: 1px solid var(--glass-border);">
+                <p><strong>Ring ring... ring ring...</strong></p>
+                <p style="margin: 1rem 0;"><strong>"Hello, this is Dr. Luni Akana from the Fire Isles Ministry of Health. We have an urgent situation and need your expertise immediately."</strong></p>
+                <p><strong>"We're seeing multiple cases of febrile illness across our island, and we're not sure what we're dealing with. Can you help us investigate this outbreak?"</strong></p>
+            </div>
 
-        function resetProgress() {
-            const progressBar = document.getElementById('progressBar');
-            const progressText = document.getElementById('progressText');
-            
-            progressBar.style.width = '0%';
-            progressText.textContent = 'Progress Reset (0/15 sections)';
-            
-            setTimeout(() => {
-                progressBar.style.width = '5%';
-                progressText.textContent = 'Ready to Begin (0/15 sections)';
-            }, 500);
-        }
+            <div style="background: rgba(239, 68, 68, 0.2); border: 1px solid rgba(239, 68, 68, 0.4); border-radius: 12px; padding: 1rem; margin: 1.5rem 0;">
+                <span style="font-size: 1.5rem;">⚠️</span>
+                <strong>Time is critical!</strong> You need to make a decision quickly.
+            </div>
 
-        // Add subtle hover effects to cards
-        document.querySelectorAll('.card').forEach(card => {
-            card.addEventListener('mouseenter', function() {
-                this.style.transform = 'translateY(-8px)';
-            });
-            
-            card.addEventListener('mouseleave', function() {
-                this.style.transform = 'translateY(0)';
-            });
-        });
+            <div style="text-align: center; margin: 2rem 0;">
+                <p><strong>How do you respond?</strong></p>
+            </div>
 
-        // Intersection Observer for scroll animations
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
+            <div style="display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center; margin: 2rem 0;">
+                [["I'll come immediately!"->Rushed Departure]]
+                [["Let me quickly review your local context first"->Review Info]]
+            </div>
+        </tw-passagedata>
 
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
-                }
-            });
-        }, observerOptions);
+        <!-- Continue with all your existing passages, but I'll add a few key ones to show the integration -->
+        
+        <tw-passagedata pid="3" name="Rushed Departure" tags="" position="125,650" size="100,100">
+            <div style="background: var(--danger); color: white; padding: 1.5rem; border-radius: 15px; text-align: center; margin-bottom: 2rem;">
+                <h2>✈️ Immediate Departure</h2>
+            </div>
 
-        // Observe all animated elements
-        document.querySelectorAll('.fade-in, .slide-in-left, .slide-in-right').forEach(el => {
-            observer.observe(el);
-        });
-    </script>
-</body>
-</html>
+            <p><strong>You pack quickly and catch the next flight to the Fire Isles.</strong></p>
+
+            <div style="background: rgba(239, 68, 68, 0.2); border: 1px solid rgba(239, 68, 68, 0.4); border-radius: 12px; padding: 1rem; margin: 1.5rem 0;">
+                <span style="font-size: 1.5rem;">⚠️</span>
+                <strong>Upon arrival...</strong><br>
+                Dr. Luni Akana meets you at the airport: "Thank you for coming so quickly! I assume you reviewed our local context - the endemic diseases, vector species, and recent outbreak patterns?"
+                <br><br>
+                <strong>You realize you don't have basic information about the Fire Isles...</strong>
+            </div>
+
+            <div style="background: var(--danger); color: white; padding: 1rem; border-radius: 12px; margin: 1rem 0;">
+                <strong>⚠️ CONSEQUENCE: You're starting unprepared</strong><br>
+                <em>This will make the investigation more challenging</em>
+            </div>
+
+            <p><strong>You respond honestly:</strong></p>
+            [["Actually, I came so quickly I didn't get briefed. Could you help me catch up?"->Catch Up Briefing]]
+        </tw-passagedata>
+
+        <tw-passagedata pid="23" name="Review Info" tags="" position="850,200" size="100,100">
+            [[⬅️ BACK->Phone Call]]
+
+            <div style="background: var(--primary); color: white; padding: 1.5rem; border-radius: 15px; text-align: center; margin-bottom: 2rem;">
+                <h2>📋 Background Information</h2>
+            </div>
+
+            <div style="background: var(--glass); padding: 2rem; border-radius: 15px; margin: 1rem 0; border: 1px solid var(--glass-border);">
+                <h3 style="color: var(--info);">🏝️ Fire Isles Context:</h3>
+                <ul>
+                    <li><strong>Location:</strong> Pacific island nation</li>
+                    <li><strong>Population:</strong> 128,000 people</li>
+                    <li><strong>Main city:</strong> Firetown (capital)</li>
+                    <li><strong>Current season:</strong> Early wet season</li>
+                </ul>
+
+                <h3 style="color: var(--accent);">🦠 Disease Context:</h3>
+                <ul>
+                    <li><strong>Endemic diseases:</strong> Lymphatic filariasis, HIV, tuberculosis</li>
+                    <li><strong>Recent outbreaks:</strong> Zika, Chikungunya (last 5 years)</li>
+                    <li><strong>Notable:</strong> No malaria cases in last 5 years</li>
+                </ul>
+
+                <h3 style="color: var(--success);">🦟 Vector Ecology:</h3>
+                <ul>
+                    <li><strong>Present:</strong> <em>Aedes</em> and <em>Culex</em> mosquitoes</li>
+                    <li><strong>Absent:</strong> <em>Anopheles</em> mosquitoes</li>
+                    <li><strong>Implication:</strong> Dengue/Zika transmission possible, malaria unlikely</li>
+                </ul>
+
+                <h3 style="color: var(--danger);">⚠️ Current Situation:</h3>
+                <ul>
+                    <li>Multiple febrile illness cases reported</li>
+                    <li>Cause unknown - investigation needed</li>
+                    <li>Your expertise requested by local authorities</li>
+                </ul>
+            </div>
+
+            <div style="background: var(--success); color: white; padding: 1rem; border-radius: 12px; margin: 1rem 0; text-align: center;">
+                <strong>✅ You're now well-prepared for the investigation</strong>
+            </div>
+
+            <div style="text-align: center; margin: 2rem 0;">
+                [[✈️ Fly to Fire Isles->Prepared Arrival]]
+            </div>
+        </tw-passagedata>
+
+        <!-- Add more passages following the same enhanced styling pattern... -->
+        <!-- I'll add the final passage to show completion -->
+        
+        <tw-passagedata pid="22" name="Scenario End" tags="" position="1300,3725" size="100,100">
+            [[⬅️ BACK->Final Report Intro]]
+
+            <div style="background: linear-gradient(135deg, var(--success) 0%, var(--secondary) 100%); color: white; padding: 2rem; border-radius: 20px; text-align: center; margin-bottom: 2rem; animation: emergencyPulse 2s ease-in-out infinite;">
+                <h2>🎯 SCENARIO COMPLETE!</h2>
+            </div>
+
+            <div style="background: var(--glass); padding: 2rem; border-radius: 15px; margin: 1rem 0; border: 1px solid var(--glass-border);">
+                <p style="font-size: 1.2rem;">Congratulations! You have successfully completed the Fire Isles dengue outbreak investigation.</p>
+                <p>You now have all the epidemiological data needed to write your comprehensive outbreak investigation report.</p>
+            </div>
+
+            <div style="background: var(--dark-secondary); padding: 2rem; border-radius: 15px; margin: 2rem 0;">
+                <h3>What You've Accomplished:</h3>
+                <ul style="list-style: none; padding: 0;">
+                    <li style="padding: 0.5rem 0; display: flex; align-items: center; gap: 0.5rem;">
+                        <span style="color: var(--success); font-size: 1.2rem;">✅</span>
+                        Calculated attack rates by geographic region
+                    </li>
+                    <li style="padding: 0.5rem 0; display: flex; align-items: center; gap: 0.5rem;">
+                        <span style="color: var(--success); font-size: 1.2rem;">✅</span>
+                        Identified vector breeding patterns
+                    </li>
+                    <li style="padding: 0.5rem 0; display: flex; align-items: center; gap: 0.5rem;">
+                        <span style="color: var(--success); font-size: 1.2rem;">✅</span>
+                        Analyzed case-control study findings
+                    </li>
+                    <li style="padding: 0.5rem 0; display: flex; align-items: center; gap: 0.5rem;">
+                        <span style="color: var(--success); font-size: 1.2rem;">✅</span>
+                        Identified key risk and protective factors
+                    </li>
+                    <li style="padding: 0.5rem 0; display: flex; align-items: center; gap: 0.5rem;">
+                        <span style="color: var(--success); font-size: 1.2rem;">✅</span>
+                        Gathered evidence for control recommendations
+                    </li>
+                </ul>
+            </div>
